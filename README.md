@@ -16,9 +16,10 @@ Start visual studio, use "source control" and choose menu "Clone"
 enter: https://github.com/ckl67/rasodalo.git
 Choose your local directory
 
-In viual Studio, open terminal,
-git config --global user.name "ckl67"
-git config --global user.email "christian.klugesherz@gmail.com"
+In visual Studio, open terminal,
+
+     git config --global user.name "ckl67"
+     git config --global user.email "christian.klugesherz@gmail.com"
 
 
 # Raspberry 
