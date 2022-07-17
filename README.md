@@ -12,8 +12,14 @@ Even if the code will run on a Raspberry, as it will be developed in Python we w
 
 # Setup
 
-Start Windows command prompt then run
-    git clone https://github.com/ckl67/rasodalo.git
+Start visual studio, use "source control" and choose menu "Clone"
+enter: https://github.com/ckl67/rasodalo.git
+Choose your local directory
+
+In viual Studio, open terminal,
+git config --global user.name "ckl67"
+git config --global user.email "christian.klugesherz@gmail.com"
+
 
 # Raspberry 
 
