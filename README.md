@@ -23,6 +23,12 @@ In visual Studio, open terminal,
 
 Make a first commit, and synhro, "Visual Studio" will start "Authorize Git Credential Manager"
 
+Create a file .gitignore and add
+
+    *.log
+    __pycache__/
+
+
 ## python
 
 Install Python
@@ -33,7 +39,7 @@ The default path is :
 
 Edit the system environment variables, and add the path
 
-     For add the path just surch in windows "environment variables"
+     For add the path, just surch in windows "environment variables"
 
 Install [PyUSB](https://github.com/pyusb/pyusb)
 PyUSB provides for easy access to the host machine's Universal Serial Bus (USB) system for Python 3.
@@ -121,6 +127,11 @@ Choose your local directory
 
 Make a first commit, and synhro, "Visual Studio" will start "Authorize Git Credential Manager"
 
+Create a file .gitignore and add
+
+    *.log
+    __pycache__/
+
 ## Python3
 
 Python is installed by default
@@ -140,7 +151,7 @@ Connect your sound level meter on your raspberry and read Product + Vendor ID
    idVendor           0x10c4 Cygnal Integrated Products, Inc.
    idProduct          0xea60 CP2102/CP2109 UART Bridge Controller [CP210x family]
 
-= Setting permissions for the usb device: =
+### Setting permissions for the usb device:
 
 create a file called "/etc/udev/rules.d/50-usb-perms.rules". 
 The file has to end in ".rules" to be read.
@@ -172,3 +183,4 @@ You can test which rules are being applied with:
 
     udevadm test $(udevadm info -q path -n /dev/bus/usb/001/002)
     (That's how I finally figured out that my file wasn't being read, because it didn't end in ".rules".)
+

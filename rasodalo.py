@@ -5,7 +5,7 @@ USB_idProduct = 0xEA60
 
 
 def connect():
-    dev = usb.core.find(idVendor=0x10C4, idProduct=0xEA60)
+    dev = usb.core.find(idVendor=USB_idVendor, idProduct=USB_idProduct)
     assert dev is not None
     print(dev)
     return dev

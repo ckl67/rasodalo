@@ -6,6 +6,7 @@ class LogRoll():
             os.stat(logdir)
         except:
             os.mkdir(logdir)
+            
         self.logdir = logdir
         self.oldlogname = None
         self.fp = None

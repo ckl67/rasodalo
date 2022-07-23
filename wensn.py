@@ -15,17 +15,12 @@ weights = ["A", "C"]
 maxModes = ["instant", "max"]
 
 def connect():
-    dev = usb.core.find(idVendor=0x16c0, idProduct=0x5dc)
+    dev = usb.core.find(idVendor=0x10C4, idProduct=0xEA60)
     assert dev is not None
     print(dev)
     return dev
 
-def readBRequest(dev, bRequest):
-    ret = dev.ctrl_transfer(0xC0, bRequest, 0, 10, 200)
-    print(ret),
-    for elem in ret:
-        print(format(elem, '#010b')),
-    print
+
 
 def readMode(dev):
     ret = dev.ctrl_transfer(0xC0, 2, 0, 10, 200)
@@ -60,18 +55,22 @@ peak = 0
 def readSPL(dev):
     global peak
 
-    ret = dev.ctrl_transfer(0xC0, 4, 0, 10, 200) # wvalue (3rd arg) is ignored
-    #print(ret)
-    #print(format(ret[1], '#010b'))
-
-    rangeN = (ret[1]&28)>>2 # bits 2,3,4 in ret[1] return rangeN from 0 to 6
-    weightN = (ret[1]&32)>>5 # bit 5 in ret[1] return weightN
-    speedN = (ret[1]&64)>>6 # bit 6 in ret[1] return speedN
+    ret = dev.ctrl_transfer(0xC0, 16, 0, 0, 200) # wvalue (3rd arg) is ignored
+    print(ret)
+    print(format(ret[0], '#010b'))
+    
+    rangeN = 0
+    weightN = 0
+    speedN = 0
+    dB =0
+   # rangeN = (ret[1]&28)>>2 # bits 2,3,4 in ret[1] return rangeN from 0 to 6
+   # weightN = (ret[1]&32)>>5 # bit 5 in ret[1] return weightN
+   # speedN = (ret[1]&64)>>6 # bit 6 in ret[1] return speedN
     # bit 7 seems to alternate every 1 second?
 
-    dB = (ret[0] + ((ret[1] & 3) * 256)) * 0.1 + 30
-    if dB > peak:
-        peak = dB
+   # dB = (ret[0] + ((ret[1] & 3) * 256)) * 0.1 + 30
+   # if dB > peak:
+   #     peak = dB
     return(dB, ranges[rangeN], weights[weightN], speeds[speedN])
 
 
@@ -84,22 +83,21 @@ if __name__ == "__main__":
     dev = connect()
 
     # set default modes: "A" weighting, "slow"
-    setMode(dev)
+   # setMode(dev)
 
     log = logroll.LogRoll(logdir="logs")
     while True:
         now = datetime.datetime.now()
         # roll over to a new log whenever the filename changes - in this case, every hour.
-        log.open_or_reopen(now.strftime('%Y-%m-%d-%H-%M.log'))
+        # log.open_or_reopen(now.strftime('%Y-%m-%d-%H-%M.log'))
+        log.open_or_reopen(now.strftime('%Y-%m-%d-%H-00.log'))
 
         dB, range, weight, speed = readSPL(dev)
-        print("%.2f,%s,%s,%s"
-              % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')),
-              file = log.fp)
-        print("%.2f,%s,%s,%s"
-              % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')))
+        
+        #print("%.2f,%s,%s,%s" % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')), file = log.fp)
+        #print("%.2f,%s,%s,%s" % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')))
 
-        log.fp.flush()
+        #log.fp.flush()
         time.sleep(1)
 
 
