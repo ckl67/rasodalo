@@ -21,10 +21,9 @@ def connect():
     return dev
 
 
-
 def readMode(dev):
     ret = dev.ctrl_transfer(0xC0, 2, 0, 10, 200)
-    #print(ret)
+    print(ret)
     #print(format(ret[0], '#010b'))
 
     rangeN = (ret[0]&7) # bits 1,2,3 in ret[0] return rangeN from 0 to 6
@@ -55,7 +54,7 @@ peak = 0
 def readSPL(dev):
     global peak
 
-    ret = dev.ctrl_transfer(0xC0, 16, 0, 0, 200) # wvalue (3rd arg) is ignored
+    ret = dev.ctrl_transfer(0xC1, 8, 0, 0, 200) # wvalue (3rd arg) is ignored
     print(ret)
     print(format(ret[0], '#010b'))
     
@@ -82,6 +81,8 @@ if __name__ == "__main__":
     # connect to WS1381 over USB
     dev = connect()
 
+    dev.set_configuration()
+
     # set default modes: "A" weighting, "slow"
    # setMode(dev)
 
@@ -90,9 +91,13 @@ if __name__ == "__main__":
         now = datetime.datetime.now()
         # roll over to a new log whenever the filename changes - in this case, every hour.
         # log.open_or_reopen(now.strftime('%Y-%m-%d-%H-%M.log'))
-        log.open_or_reopen(now.strftime('%Y-%m-%d-%H-00.log'))
+        #log.open_or_reopen(now.strftime('%Y-%m-%d-%H-00.log'))
 
-        dB, range, weight, speed = readSPL(dev)
+        val = dev.read(0x82, 7)
+        print(val)
+        #readMode(dev)
+
+        # dB, range, weight, speed = readSPL(dev)
         
         #print("%.2f,%s,%s,%s" % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')), file = log.fp)
         #print("%.2f,%s,%s,%s" % (dB, weight, speed, now.strftime('%Y,%m,%d,%H,%M,%S')))
